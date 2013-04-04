@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Silverlight.Testing;
 
-namespace PubNub_Messaging
+namespace PubnubSilverlight
 {
     public class Instance
     {
@@ -18,10 +18,13 @@ namespace PubNub_Messaging
         {
             get
             {
-                var settings = UnitTestSystem.CreateDefaultSettings();
+                UnitTestSettings settings = UnitTestSystem.CreateDefaultSettings();
+                settings.TestService = null;
+                
                 settings.ShowTagExpressionEditor = false;
                 settings.StartRunImmediately = true;
-                return UnitTestSystem.CreateTestPage(settings);
+                UIElement page = UnitTestSystem.CreateTestPage(settings);
+                return page;
             }
         }
     }

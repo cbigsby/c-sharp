@@ -9,7 +9,7 @@
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PubNub_Messaging</RootNamespace>
+    <RootNamespace>PubnubSilverlight</RootNamespace>
     <AssemblyName>PubnubSilverlight.Example</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
@@ -20,7 +20,7 @@
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
     <XapFilename>PubnubSilverlight.Example.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>PubNub_Messaging.App</SilverlightAppEntry>
+    <SilverlightAppEntry>PubnubSilverlight.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
@@ -73,22 +73,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConcurrentHashtable_Silverlight">
-      <HintPath>..\Libraries\ConcurrentHashtable_Silverlight.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>..\Libraries\Microsoft.Silverlight.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
-      <HintPath>..\Libraries\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Libraries\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Threading.Tasks.SL5">
-      <HintPath>..\packages\System.Threading.Tasks.3.0.2-beta2\lib\sl50\System.Threading.Tasks.SL5.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.Silverlight.Testing, Version=5.0.5.0, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=5.0.5.0, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="System.Threading.Tasks.SL5, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
@@ -104,16 +92,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\Pubnub.cs" />
-    <Compile Include="Imports\AtlasWeb.cs" />
-    <Compile Include="Imports\HttpEncoder.cs" />
-    <Compile Include="Imports\JavaScriptConverter.cs" />
-    <Compile Include="Imports\JavaScriptObjectDeserializer.cs" />
-    <Compile Include="Imports\JavaScriptSerializer.cs" />
-    <Compile Include="Imports\JavaScriptString.cs" />
-    <Compile Include="Imports\JavaScriptTypeResolver.cs" />
-    <Compile Include="Imports\ObjectConverter.cs" />
-    <Compile Include="Imports\ScriptIgnoreAttribute.cs" />
-    <Compile Include="Imports\Trace.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -121,11 +99,15 @@
     <Compile Include="Dialogs\PublishMessageDialog.xaml.cs">
       <DependentUpon>PublishMessageDialog.xaml</DependentUpon>
     </Compile>
-    <None Include="UnitTest\EncryptionTests.cs" />
+    <Compile Include="UnitTest\CustomClass.cs" />
+    <Compile Include="UnitTest\EncryptionTests.cs" />
     <Compile Include="UnitTest\Main.cs" />
-    <None Include="UnitTest\WhenAMessageIsPublished.cs" />
-    <None Include="UnitTest\WhenGetRequestServerTime.cs" />
-    <None Include="UnitTest\WhenSubscribedToAChannel.cs" />
+    <Compile Include="UnitTest\WhenAClientIsPresented.cs" />
+    <Compile Include="UnitTest\WhenAMessageIsPublished.cs" />
+    <Compile Include="UnitTest\PubnubUnitTest.cs" />
+    <Compile Include="UnitTest\WhenGetRequestServerTime.cs" />
+    <Compile Include="UnitTest\WhenSubscribedToAChannel.cs" />
+    <Compile Include="UnitTest\WhenDetailedHistoryIsRequested.cs" />
     <Compile Include="Views\CodeExampleView.xaml.cs">
       <DependentUpon>CodeExampleView.xaml</DependentUpon>
     </Compile>
@@ -143,7 +125,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -155,13 +136,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\ButtonStyle.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Styles\PubnubSilverlightButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Styles.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Styles\PubnubSilverlightStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CodeExampleView.xaml">
       <SubType>Designer</SubType>
@@ -175,6 +156,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SL5\Microsoft.Silverlight.Testing.dll" />
+    <Content Include="SL5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll" />
+    <Content Include="SL5\Newtonsoft.Json.dll" />
+    <Content Include="SL5\System.Threading.Tasks.SL5.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

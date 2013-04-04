@@ -12,9 +12,8 @@ using System.Windows.Shapes;
 using System.Windows.Navigation;
 using Microsoft.Silverlight.Testing.Controls;
 using Microsoft.Silverlight.Testing.Client;
-using PubNub_Messaging;
 
-namespace PubNub_Messaging
+namespace PubnubSilverlight
 {
     public partial class CodeUnitTestView : Page
     {
@@ -26,14 +25,16 @@ namespace PubNub_Messaging
 
             ContainerForTest.Children.Add(page);
 
-            (page as TestPage).TreeView.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(TreeView_SelectedItemChanged);
+            TestPage unitTestPage = page as TestPage;
+            Microsoft.Silverlight.Testing.Controls.TreeView resultsView = unitTestPage.TreeView;
+            resultsView.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(TreeView_SelectedItemChanged);
         }
 
         void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
            var tree = sender as Microsoft.Silverlight.Testing.Controls.TreeView;
-               
-           tree.ExpandAll();
+
+           tree.ExpandToDepth(1);
         }
 
         // Executes when the user navigates to this page.

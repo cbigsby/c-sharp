@@ -5,10 +5,11 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel;
 using System.Threading;
-using System.Web.Script.Serialization;
 using System.Collections;
-using PubnubSilverlight.Core;
 using Microsoft.Silverlight.Testing;
+using PubNubMessaging.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace PubnubSilverlight.UnitTest
@@ -16,30 +17,35 @@ namespace PubnubSilverlight.UnitTest
     [TestClass]
     public class WhenDetailedHistoryIsRequested : SilverlightTest
     {
-        bool msg10Received = false;
-        bool msg10ReverseTrueReceived = false;
-        bool msgStartReverseTrue = false;
+        bool message10Received = false;
+        bool message10ReverseTrueReceived = false;
+        bool messageStartReverseTrue = false;
 
         int expectedCountAtStartTimeWithReverseTrue=0;
         long startTimeWithReverseTrue = 0;
 
-        bool isDetailedHistory = false;
-        bool isDetailedHistoryReverse = false;
+        bool detailedHistoryCount10CallbackInvoked = false;
+        bool detailedHistoryCount10ReverseCallbackInvoked = false;
         bool isDetailedHistoryStartReverseTrue = false;
-        bool isPublishStartReverseTrue = false;
+        bool detailedHistoryPublishCallbackInvoked = false;
 
         [TestMethod]
         [Asynchronous]
         public void DetailHistoryCount10ReturnsRecords()
         {
-            msg10Received = false;
+            message10Received = false;
 
             Pubnub pubnub = new Pubnub("demo", "demo", "", "", false);
             string channel = "my/channel";
 
-            EnqueueCallback(() => pubnub.detailedHistory<string>(channel, 10, DetailedHistoryCount10Callback));
-            EnqueueConditional(() => isDetailedHistory);
-            EnqueueCallback(() => Assert.IsTrue(msg10Received, "Detailed History Failed"));
+            PubnubUnitTest unitTest = new PubnubUnitTest();
+            unitTest.TestClassName = "WhenDetailedHistoryIsRequested";
+            unitTest.TestCaseName = "DetailHistoryCount10ReturnsRecords";
+            pubnub.PubnubUnitTest = unitTest;
+
+            EnqueueCallback(() => pubnub.DetailedHistory<string>(channel, 10, DetailedHistoryCount10Callback));
+            EnqueueConditional(() => detailedHistoryCount10CallbackInvoked);
+            EnqueueCallback(() => Assert.IsTrue(message10Received, "Detailed History Failed"));
 
             EnqueueTestComplete();
         }
@@ -49,36 +55,40 @@ namespace PubnubSilverlight.UnitTest
         {
             if (!string.IsNullOrWhiteSpace(result))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                IList receivedObj = (IList)js.DeserializeObject(result);
-                if (receivedObj is object[])
+                object[] deserializedMessage = JsonConvert.DeserializeObject<object[]>(result);
+                if (deserializedMessage is object[])
                 {
-                    if (receivedObj[0] is object[])
+                    JArray message = deserializedMessage[0] as JArray;
+                    if (message != null)
                     {
-                        object[] historyObj = (object[])receivedObj[0];
-                        if (historyObj.Length >= 0)
+                        if (message.Count >= 0)
                         {
-                            msg10Received = true;
+                            message10Received = true;
                         }
                     }
                 }
             }
 
-            isDetailedHistory = true;
+            detailedHistoryCount10CallbackInvoked = true;
         }
 
         [TestMethod]
         [Asynchronous]
         public void DetailHistoryCount10ReverseTrueReturnsRecords()
         {
-            msg10ReverseTrueReceived = false;
+            message10ReverseTrueReceived = false;
 
             Pubnub pubnub = new Pubnub("demo", "demo", "", "", false);
             string channel = "my/channel";
 
-            EnqueueCallback(() => pubnub.detailedHistory<string>(channel, -1, -1, 10, true, DetailedHistoryCount10ReverseTrueCallback));
-            EnqueueConditional(() => isDetailedHistoryReverse);
-            EnqueueCallback(() => Assert.IsTrue(msg10ReverseTrueReceived, "Detailed History Failed"));
+            PubnubUnitTest unitTest = new PubnubUnitTest();
+            unitTest.TestClassName = "WhenDetailedHistoryIsRequested";
+            unitTest.TestCaseName = "DetailHistoryCount10ReverseTrueReturnsRecords";
+            pubnub.PubnubUnitTest = unitTest;
+
+            EnqueueCallback(() => pubnub.DetailedHistory<string>(channel, -1, -1, 10, true, DetailedHistoryCount10ReverseTrueCallback));
+            EnqueueConditional(() => detailedHistoryCount10ReverseCallbackInvoked);
+            EnqueueCallback(() => Assert.IsTrue(message10ReverseTrueReceived, "Detailed History Failed"));
 
             EnqueueTestComplete();
         }
@@ -88,22 +98,21 @@ namespace PubnubSilverlight.UnitTest
         {
             if (!string.IsNullOrWhiteSpace(result))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                IList receivedObj = (IList)js.DeserializeObject(result);
-                if (receivedObj is object[])
+                object[] deserializedMessage = JsonConvert.DeserializeObject<object[]>(result);
+                if (deserializedMessage is object[])
                 {
-                    if (receivedObj[0] is object[])
+                    JArray message = deserializedMessage[0] as JArray;
+                    if (message != null)
                     {
-                        object[] historyObj = (object[])receivedObj[0];
-                        if (historyObj.Length >= 0)
+                        if (message.Count >= 0)
                         {
-                            msg10ReverseTrueReceived = true;
+                            message10ReverseTrueReceived = true;
                         }
                     }
                 }
             }
 
-            isDetailedHistoryReverse = true;
+            detailedHistoryCount10ReverseCallbackInvoked = true;
         }
 
         [TestMethod]
@@ -111,28 +120,32 @@ namespace PubnubSilverlight.UnitTest
         public void DetailedHistoryStartWithReverseTrue()
         {
             expectedCountAtStartTimeWithReverseTrue = 0;
-            msgStartReverseTrue = false;
+            messageStartReverseTrue = false;
             Pubnub pubnub = new Pubnub("demo", "demo", "", "", false);
+
+            PubnubUnitTest unitTest = new PubnubUnitTest();
+            unitTest.TestClassName = "WhenDetailedHistoryIsRequested";
+            unitTest.TestCaseName = "DetailedHistoryStartWithReverseTrue";
+            pubnub.PubnubUnitTest = unitTest;
+
             string channel = "my/channel";
-            startTimeWithReverseTrue = Pubnub.translateDateTimeToPubnubUnixNanoSeconds(DateTime.UtcNow);
+            startTimeWithReverseTrue = Pubnub.TranslateDateTimeToPubnubUnixNanoSeconds(DateTime.UtcNow);
 
             EnqueueCallback(() =>
             {
                 for (int index = 0; index < 10; index++)
                 {
-                    EnqueueCallback(() =>
-                    {
-                        pubnub.publish<string>(channel, string.Format("DetailedHistoryStartTimeWithReverseTrue {0} {1}", startTimeWithReverseTrue, index), DetailedHistorySamplePublishCallback);
-                    });
-                    EnqueueConditional(() => isPublishStartReverseTrue);
+                    pubnub.Publish<string>(channel,
+                                        string.Format("DetailedHistoryStartTimeWithReverseTrue {0}", index),
+                                        DetailedHistorySamplePublishCallback);
+                    Thread.Sleep(100);
+                    EnqueueConditional(() => detailedHistoryPublishCallbackInvoked);
                 }
             });
 
-            //EnqueueCallback(() => Thread.Sleep(5000)); !!!
-
-            EnqueueCallback(() => pubnub.detailedHistory<string>(channel, startTimeWithReverseTrue, DetailedHistoryStartWithReverseTrueCallback, true));
+            EnqueueCallback(() => pubnub.DetailedHistory<string>(channel, startTimeWithReverseTrue, DetailedHistoryStartWithReverseTrueCallback, true));
             EnqueueConditional(() => isDetailedHistoryStartReverseTrue);
-            EnqueueCallback(() => Assert.IsTrue(msgStartReverseTrue, "Detailed History with Start and Reverse True Failed"));
+            EnqueueCallback(() => Assert.IsTrue(messageStartReverseTrue, "Detailed History with Start and Reverse True Failed"));
 
             EnqueueTestComplete();
         }
@@ -143,25 +156,24 @@ namespace PubnubSilverlight.UnitTest
             int actualCountAtStartTimeWithReverseFalse = 0;
             if (!string.IsNullOrWhiteSpace(result))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                IList receivedObj = (IList)js.DeserializeObject(result);
-                if (receivedObj is object[])
+                object[] deserializedMessage = JsonConvert.DeserializeObject<object[]>(result);
+                if (deserializedMessage is object[])
                 {
-                    if (receivedObj[0] is object[])
+                    JArray message = deserializedMessage[0] as JArray;
+                    if (message != null)
                     {
-                        object[] historyObj = (object[])receivedObj[0];
-                        if (historyObj.Length >= expectedCountAtStartTimeWithReverseTrue)
+                        if (message.Count >= expectedCountAtStartTimeWithReverseTrue)
                         {
-                            foreach (object item in historyObj)
+                            foreach (object item in message)
                             {
-                                if (item.ToString().Contains(string.Format("DetailedHistoryStartTimeWithReverseTrue {0}", startTimeWithReverseTrue)))
+                                if (item.ToString().Contains("DetailedHistoryStartTimeWithReverseTrue"))
                                 {
                                     actualCountAtStartTimeWithReverseFalse++;
                                 }
                             }
                             if (actualCountAtStartTimeWithReverseFalse == expectedCountAtStartTimeWithReverseTrue)
                             {
-                                msgStartReverseTrue = true;
+                                messageStartReverseTrue = true;
                             }
                         }
                     }
@@ -175,19 +187,18 @@ namespace PubnubSilverlight.UnitTest
         {
             if (!string.IsNullOrWhiteSpace(result))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                IList receivedObj = (IList)js.DeserializeObject(result);
-                if (receivedObj is object[])
+                object[] deserializedMessage = JsonConvert.DeserializeObject<object[]>(result);
+                if (deserializedMessage is object[])
                 {
-                    int statusCode = (int)receivedObj[0];
-                    string statusMsg = (string)receivedObj[1];
-                    if (statusCode == 1 && statusMsg.ToLower() == "sent")
+                    int statusCode = Int32.Parse(deserializedMessage[0].ToString());
+                    string statusMessage = (string)deserializedMessage[1];
+                    if (statusCode == 1 && statusMessage.ToLower() == "sent")
                     {
                         expectedCountAtStartTimeWithReverseTrue++;
                     }
                 }
             }
-            isPublishStartReverseTrue = true;
+            detailedHistoryPublishCallbackInvoked = true;
         }
     }
 }

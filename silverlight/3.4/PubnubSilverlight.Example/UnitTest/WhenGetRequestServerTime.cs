@@ -5,11 +5,14 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel;
 using System.Threading;
-using System.Web.Script.Serialization;
 using System.Collections;
 using Microsoft.Silverlight.Testing;
+using PubNubMessaging.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace PubNub_Messaging
+
+namespace PubnubSilverlight.UnitTest
 {
     [TestClass]
     public class WhenGetRequestServerTime : SilverlightTest
@@ -22,8 +25,12 @@ namespace PubNub_Messaging
         public void ThenItShouldReturnTimeStamp()
         {
             Pubnub pubnub = new Pubnub("demo", "demo", "", "", false);
+            PubnubUnitTest unitTest = new PubnubUnitTest();
+            unitTest.TestClassName = "WhenGetRequestServerTime";
+            unitTest.TestCaseName = "ThenItShouldReturnTimeStamp";
+            pubnub.PubnubUnitTest = unitTest;
 
-            EnqueueCallback(() => pubnub.time<string>(ReturnTimeStampCallback));
+            EnqueueCallback(() => pubnub.Time<string>(ReturnTimeStampCallback));
             EnqueueConditional(() => isTimeStamp);
             EnqueueCallback(() => Assert.IsTrue(timeReceived, "time() Failed"));
             EnqueueTestComplete();
@@ -34,11 +41,10 @@ namespace PubNub_Messaging
         {
             if (!string.IsNullOrWhiteSpace(result))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                IList receivedObj = (IList)js.DeserializeObject(result);
-                if (receivedObj is object[])
+                object[] deserializedMessage = JsonConvert.DeserializeObject<object[]>(result);
+                if (deserializedMessage is object[])
                 {
-                    string time = receivedObj[0].ToString();
+                    string time = deserializedMessage[0].ToString();
                     if (time.Length > 0)
                     {
                         timeReceived = true;
@@ -53,7 +59,7 @@ namespace PubNub_Messaging
         {
             //Test for 26th June 2012 GMT
             DateTime dt = new DateTime(2012,6,26,0,0,0,DateTimeKind.Utc);
-            long nanosecTime = Pubnub.translateDateTimeToPubnubUnixNanoSeconds(dt);
+            long nanosecTime = Pubnub.TranslateDateTimeToPubnubUnixNanoSeconds(dt);
             Assert.AreEqual<long>(13406688000000000, nanosecTime);
         }
 
@@ -62,7 +68,7 @@ namespace PubNub_Messaging
         {
             //Test for 26th June 2012 GMT
             DateTime expectedDt = new DateTime(2012, 6, 26, 0, 0, 0, DateTimeKind.Utc);
-            DateTime actualDt = Pubnub.translatePubnubUnixNanoSecondsToDateTime(13406688000000000);
+            DateTime actualDt = Pubnub.TranslatePubnubUnixNanoSecondsToDateTime(13406688000000000);
             Assert.AreEqual<DateTime>(expectedDt, actualDt);
         }
     }

@@ -13,29 +13,25 @@ using System.Windows.Navigation;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.IO;
-using System.Threading;
-using Microsoft.Silverlight.Testing;
+//using System.Threading;
+//using Microsoft.Silverlight.Testing;
 using PubNubMessaging.Core;
 
-namespace PubNub_Messaging
+namespace PubnubSilverlight
 {
     public partial class CodeExampleView : Page
     {
 
         #region "Properties and Members"
 
-        static public Pubnub pubnub;
+        static public Pubnub pubnub = null;
 
-        static public bool deliveryStatus = false;
         static public string channel = "";
         static bool ssl = false;
         static string secretKey = "";
         static string cipherKey = "";
         static string uuid = "";
         static bool resumeOnReconnect = false;
-
-        static public bool enableSSL = false;
-        static public string cipheryKey = string.Empty;
 
         static int subscribeTimeoutInSeconds = 0;
         static int operationTimeoutInSeconds = 0;
@@ -51,6 +47,10 @@ namespace PubNub_Messaging
 
             Console.Container = ConsoleContainer;
 
+        }
+
+        private void CheckUserInputs()
+        {
             ssl = chkSSL.IsChecked.Value;
             secretKey = txtSecret.Text;
             cipherKey = txtCipher.Text;
@@ -72,12 +72,35 @@ namespace PubNub_Messaging
             Int32.TryParse(txtHeartbeatInterval.Text, out heartbeatIntervalInSeconds);
             heartbeatIntervalInSeconds = (heartbeatIntervalInSeconds <= 0) ? 10 : heartbeatIntervalInSeconds;
 
-            pubnub = new Pubnub("demo", "demo", secretKey, cipheryKey, ssl);
+            if (pubnub == null)
+            {
+                pubnub = new Pubnub("demo", "demo", secretKey, cipherKey, ssl);
+                txtSecret.IsEnabled = false;
+                txtCipher.IsEnabled = false;
+                txtUUID.IsEnabled = false;
+                chkSSL.IsEnabled = false;
+                chkResumeOnReconnect.IsEnabled = false;
 
+                txtSubscribeTimeout.IsEnabled = false;
+                txtNonSubscribeTimeout.IsEnabled = false;
+                txtNetworkMaxRetries.IsEnabled = false;
+                txtRetryInterval.IsEnabled = false;
+                txtHeartbeatInterval.IsEnabled = false;
+
+                btnReset.IsEnabled = true;
+            }
+            pubnub.SessionUUID = uuid;
+            pubnub.SubscribeTimeout = subscribeTimeoutInSeconds;
+            pubnub.NonSubscribeTimeout = operationTimeoutInSeconds;
+            pubnub.NetworkCheckMaxRetries = networkMaxRetries;
+            pubnub.NetworkCheckRetryInterval = networkRetryIntervalInSeconds;
+            pubnub.HeartbeatInterval = heartbeatIntervalInSeconds;
+            pubnub.EnableResumeOnReconnect = resumeOnReconnect;
         }
 
         private void Subscribe_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running subscribe()");
             pubnub.Subscribe<string>(channel, DisplayUserCallbackMessage, DisplayConnectCallbackMessage);
@@ -85,6 +108,7 @@ namespace PubNub_Messaging
 
         private void Publish_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running publish()");
 
@@ -104,6 +128,7 @@ namespace PubNub_Messaging
 
         private void Presence_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running presence()");
             pubnub.Presence<string>(channel, DisplayUserCallbackMessage, DisplayConnectCallbackMessage);
@@ -111,6 +136,7 @@ namespace PubNub_Messaging
 
         private void History_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running detailed history()");
             pubnub.DetailedHistory<string>(channel, 10, DisplayUserCallbackMessage);
@@ -118,6 +144,7 @@ namespace PubNub_Messaging
 
         private void HereNow_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running Here_Now()");
             pubnub.HereNow<string>(channel, DisplayUserCallbackMessage);
@@ -125,6 +152,7 @@ namespace PubNub_Messaging
 
         private void Unsubscribe_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running unsubscribe()");
             pubnub.Unsubscribe<string>(channel, DisplayUserCallbackMessage, DisplayUserCallbackMessage, DisplayDisconnectCallbackMessage);
@@ -132,6 +160,7 @@ namespace PubNub_Messaging
 
         private void PresenceUnsubscrib_Click(object sender, RoutedEventArgs e)
         {
+            CheckUserInputs();
             channel = txtChannel.Text;
             Console.WriteLine("Running presence-unsubscribe()");
             pubnub.PresenceUnsubscribe<string>(channel, DisplayUserCallbackMessage, DisplayConnectCallbackMessage, DisplayDisconnectCallbackMessage);
@@ -182,6 +211,28 @@ namespace PubNub_Messaging
             Console.WriteLine("");
             Console.WriteLine("Enabling Network Connection (yes internet)");
             pubnub.DisableSimulateNetworkFailForTestingOnly();
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (pubnub != null)
+            {
+                pubnub.EndPendingRequests();
+                pubnub = null;
+            }
+            txtSecret.IsEnabled = true;
+            txtCipher.IsEnabled = true;
+            txtUUID.IsEnabled = true;
+            chkSSL.IsEnabled = true;
+            chkResumeOnReconnect.IsEnabled = true;
+
+            txtSubscribeTimeout.IsEnabled = true;
+            txtNonSubscribeTimeout.IsEnabled = true;
+            txtNetworkMaxRetries.IsEnabled = true;
+            txtRetryInterval.IsEnabled = true;
+            txtHeartbeatInterval.IsEnabled = true;
+
+            btnReset.IsEnabled = false;
         }
 
     }

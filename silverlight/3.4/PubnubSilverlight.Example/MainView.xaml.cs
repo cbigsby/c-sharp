@@ -16,7 +16,7 @@ using System.IO;
 using System.Threading;
 using Microsoft.Silverlight.Testing;
 
-namespace PubNub_Messaging
+namespace PubnubSilverlight
 {
     public partial class MainView : Page
     {
