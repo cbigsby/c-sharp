@@ -2075,7 +2075,6 @@ namespace PubNubMessaging.Core
             }
             catch (WebException webEx)
             {
-                Console.WriteLine(webEx.ToString());
                 bool validPublishErrorMessage = false;
                 if (asynchRequestState != null && asynchRequestState.Type == ResponseType.Publish)
                 {
