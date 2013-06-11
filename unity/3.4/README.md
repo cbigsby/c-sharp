@@ -20,6 +20,24 @@
 * NOTE: WebPlayer Assets\Newtonsoft.Json.dll version is different from Standalone version due to compatibility issues.
 Web Player DLL version was downloaded from Unity forum site. http://forum.unity3d.com/threads/50998-Newtonsoft-JSON-NET-Converter-fails-in-Unity
 
+##### iOS
+1. On iOS you need to open the Unity project form the WebPlayer\PubnubUnity folder.
+2. Ensure "Pubnub Example" is added as component to Main Camera.
+3. Go to Edit menu --> Project Settings --> Player. 
+   Under "Optimization" section, ensure Api Compatibility Level is ".Net 2.0".
+4. You may get an error SystemException: System.Net.Sockets are supported only on Unity iOS Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
+5. The code uses the pre-compiler flag UNITY_IOS to distinguish between other platforms.
+
+
+##### Android
+1. On iOS you need to open the Unity project form the WebPlayer\PubnubUnity folder.
+2. Ensure "Pubnub Example" is added as component to Main Camera.
+3. Go to Edit menu --> Project Settings --> Player. 
+   Under "Optimization" section, ensure Api Compatibility Level is ".Net 2.0".
+4. You may get an error SystemException: System.Net.Sockets are supported only on Unity iOS Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
+5. The code uses the pre-compiler flag UNITY_ANDROID to distinguish between other platforms.
+6. If running on the emulator please enable GPU emulation.
+
 #### Running the Tests
 
 1. Open up the Unity Project from either Standalone\UnityUnitTest or WebPlayer\UnityUnitTest folder.
