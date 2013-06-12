@@ -39,9 +39,10 @@ using System.Net.Security;
 #if(MONODROID)
 using Android.Runtime;
 using Javax.Net.Ssl;
+#endif
+#if(MONODROID || UNITY_ANDROID)
 using System.Security.Cryptography.X509Certificates;
 #endif
-
 
 namespace PubNubMessaging.Core
 {
@@ -284,7 +285,9 @@ namespace PubNubMessaging.Core
                 this.origin = "https://" + this.origin;
             else
                 this.origin = "http://" + this.origin;
-
+#if(UNITY_ANDROID)
+			ServicePointManager.ServerCertificateValidationCallback = ValidatorUnity;
+#endif
             //Initiate System Events for PowerModeChanged - to monitor suspend/resume
             InitiatePowerModeCheck();
         }
@@ -755,7 +758,6 @@ namespace PubNubMessaging.Core
             {
                 throw new ArgumentException("Missing connectCallback");
             }
-
             LoggingMethod.WriteToLog(string.Format("DateTime {0}, requested subscribe for channel={1}", DateTime.Now.ToString(), channel), LoggingMethod.LevelInfo);
 
             MultiChannelSubscribeInit<T>(ResponseType.Subscribe, channel, userCallback, connectCallback);
@@ -1673,7 +1675,27 @@ namespace PubNubMessaging.Core
             catch (Exception e) {
                 throw new Exception("SSL error");
             }
+
         }
+#endif
+
+#if(UNITY_ANDROID)      
+		/// <summary>
+		/// Workaround for the bug described here 
+		/// https://bugzilla.xamarin.com/show_bug.cgi?id=6501
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="certificate">Certificate.</param>
+		/// <param name="chain">Chain.</param>
+		/// <param name="sslPolicyErrors">Ssl policy errors.</param>
+		static bool ValidatorUnity (object sender,
+		                       System.Security.Cryptography.X509Certificates.X509Certificate
+		                       certificate,
+		                       System.Security.Cryptography.X509Certificates.X509Chain chain,
+		                       System.Net.Security.SslPolicyErrors sslPolicyErrors)
+		{
+			return true;
+		}
 #endif
 
         private void ConnectToHostAndSendRequestCallback<T>(IAsyncResult asynchronousResult)
@@ -1729,6 +1751,9 @@ namespace PubNubMessaging.Core
         {
 #if(MONODROID)
             SslStream sslStream = new SslStream(netStream, true, Validator, null);
+#elif(UNITY_ANDROID)
+			ServicePointManager.ServerCertificateValidationCallback = ValidatorUnity;
+			SslStream sslStream = new SslStream(netStream, true, ValidatorUnity, null);
 #else
             SslStream sslStream = new SslStream(netStream);
 #endif
@@ -1748,7 +1773,7 @@ namespace PubNubMessaging.Core
             
             sslStream.Write(sendBuffer);
             sslStream.Flush();
-#if(!MONODROID)         
+#if(!MONODROID && !UNITY_ANDROID)         
             sslStream.ReadTimeout = state.RequestState.Request.Timeout;
 #endif
             sslStream.BeginRead(state.buffer, 0, state.buffer.Length, new AsyncCallback(SendRequestUsingTcpClientCallback<T>), state);
@@ -1788,7 +1813,7 @@ namespace PubNubMessaging.Core
             System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(netStream);
             streamWriter.Write(requestString);
             streamWriter.Flush();
-#if(!MONODROID)
+#if(!MONODROID && !UNITY_ANDROID)
             netStream.ReadTimeout = pubnubRequestState.Request.Timeout;
 #endif
             netStream.BeginRead(state.buffer, 0, state.buffer.Length, new AsyncCallback(SendRequestUsingTcpClientCallback<T>), state);
@@ -1799,7 +1824,7 @@ namespace PubNubMessaging.Core
         {
             TcpClient tcpClient = new TcpClient();
             tcpClient.NoDelay = false;
-#if(!MONODROID)
+#if(!MONODROID && !UNITY_ANDROID)
             tcpClient.SendTimeout = pubnubRequestState.Request.Timeout;
 #endif          
 
@@ -3629,7 +3654,7 @@ namespace PubNubMessaging.Core
         private string GetEncryptionKey()
         {
             //Compute Hash using the SHA256 
-			#if (SILVERLIGHT || WINDOWS_PHONE || MONOTOUCH || MONODROID || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_IOS || UNITY_ANDROID)
+#if (SILVERLIGHT || WINDOWS_PHONE || MONOTOUCH || MONODROID || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_IOS || UNITY_ANDROID)
             string strKeySHA256HashRaw = ComputeHash(this.cipherKey, new System.Security.Cryptography.SHA256Managed());
 #else
             string strKeySHA256HashRaw = ComputeHash(this.cipherKey, new SHA256CryptoServiceProvider());
@@ -4008,7 +4033,7 @@ namespace PubNubMessaging.Core
         {
             if (writeToLog)
             {
-#if (SILVERLIGHT || WINDOWS_PHONE || MONOTOUCH || MONODROID)
+#if (SILVERLIGHT || WINDOWS_PHONE || MONOTOUCH || MONODROID || UNITY_ANDROID || UNITY_IOS)
                 Debug.WriteLine(logText);
 #elif (UNITY_STANDALONE || UNITY_WEBPLAYER)
                 print(logText);
