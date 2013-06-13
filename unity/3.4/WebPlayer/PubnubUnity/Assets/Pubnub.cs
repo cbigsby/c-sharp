@@ -32,7 +32,7 @@ using System.Windows.Threading;
 using System.IO.IsolatedStorage;
 using System.Net.Browser;
 #endif
-#if (__MonoCS__ && !UNITY_STANDALONE && !UNITY_WEBPLAYER)
+#if (__MonoCS__)
 using System.Net.Security;
 #endif
 
@@ -220,7 +220,7 @@ namespace PubNubMessaging.Core
 
         // Pubnub Core API implementation
         private string origin = "pubsub.pubnub.com";
-#if (__MonoCS__ && !UNITY_STANDALONE && !UNITY_WEBPLAYER)
+#if (__MonoCS__)
         private string domainName = "pubsub.pubnub.com";
 #endif
         private string publishKey = "";
@@ -1478,7 +1478,7 @@ namespace PubNubMessaging.Core
                 LoggingMethod.WriteToLog(string.Format("DateTime {0}, Request={1}", DateTime.Now.ToString(), requestUri.ToString()), LoggingMethod.LevelInfo);
 
 
-#if (__MonoCS__ && !UNITY_STANDALONE && !UNITY_WEBPLAYER)
+#if (__MonoCS__)
                 if((pubnubRequestState.Type == ResponseType.Publish) && (RequestIsUnsafe(requestUri)))
                 {
                     SendRequestUsingTcpClient<T>(requestUri, pubnubRequestState);
@@ -1510,7 +1510,7 @@ namespace PubNubMessaging.Core
             }
         }
 
-#if (__MonoCS__ && !UNITY_STANDALONE && !UNITY_WEBPLAYER)
+#if (__MonoCS__)
         bool RequestIsUnsafe(Uri requestUri)
         {
             bool isUnsafe = false;
@@ -4470,7 +4470,7 @@ namespace PubNubMessaging.Core
         }
     }
 
-#if (__MonoCS__ && !UNITY_STANDALONE && !UNITY_WEBPLAYER)
+#if (__MonoCS__)
     class StateObject<T>
     {
         public RequestState<T> RequestState

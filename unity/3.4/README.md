@@ -2,7 +2,7 @@
 ### Unity 4 for Standalone and Web Player
 
 #### Prerequisites
-1. Intall Free Full version of Unity 4 from http://unity3d.com/unity/download/ (Unity 4 is recommended, but current/later versions should be ok). MonoDevelop IDE tool will be installed as part of Unity to write C# scripts.
+1. Install Free Full version of Unity 4 from http://unity3d.com/unity/download/ (Unity 4 is recommended, but current/later versions should be ok). MonoDevelop IDE tool will be installed as part of Unity to write C# scripts.
 
 #### To run the unit test code (under UnityUnitTest folder of Standalone and WebPlayer), in addition to the above step, you need to 
 1. Import UUnit unity package from http://uunit.googlecode.com/files/UUnit_0.4.unitypackage into your Assets (Updates on this pacakage can be obtained from http://wiki.unity3d.com/index.php?title=UUnit). After import, please delete TestCaseDummy.cs and TestCaseTest.cs files from /Assets/Standard Assets/UUnit/UUnitSelfTest folder to avoid unintendend test case runs.
@@ -27,6 +27,7 @@ Web Player DLL version was downloaded from Unity forum site. http://forum.unity3
    Under "Optimization" section, ensure Api Compatibility Level is ".Net 2.0".
 4. You may get an error SystemException: System.Net.Sockets are supported only on Unity iOS Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
 5. The code uses the pre-compiler flag UNITY_IOS to distinguish between other platforms.
+6. Target iOS version 4.0 and above.
 
 
 ##### Android
@@ -37,6 +38,7 @@ Web Player DLL version was downloaded from Unity forum site. http://forum.unity3
 4. You may get an error SystemException: System.Net.Sockets are supported only on Unity iOS Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
 5. The code uses the pre-compiler flag UNITY_ANDROID to distinguish between other platforms.
 6. If running on the emulator please enable GPU emulation.
+7. Target Android version 4 (Ice cream sandwich) and above.
 
 #### Running the Tests
 
@@ -55,10 +57,11 @@ Resolution:
 Go To Edit -> Project Settings --> Player --> Inspector tab displays.
 In Inspector tab window, Under  Per-Platform settings --> "Settings for PC, Mac & Linux Standalone" or "Settings for Android", Optimization section, Set Api Compatibility Level to .NET 2.0.
 
+For Windows development machines:
 Go To File -> Build Settings -> Under Platform select "PC, Mac & Linux Standalone" or "Android". 
 Under "PC, Mac & Linux Standalone" section, Set Target Platform to Windows and Architecture to "x86_x64" (for 64 bit OS)
 
-
+For Mac you need to select the Target Platform under File -> Build Settings -> Platform ->PC, Mac & Linux Standalone as MAC OS X and Architecture x86
 
 2) Internal compiler error. See the console log for more information. output was:
 
@@ -75,7 +78,9 @@ Resolution: Unity Standalone version works only on Windows OS platforms. Current
 
 4) System.Net.WebException: Error getting response stream (Write: The authentication or decryption has failed.): SendFailure ---> System.IO.IOException: The authentication or decryption has failed. ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server
 
-Resolution: This error may occur when the Unity example was run with SSL enabled. Please ensure that ValidateServerCertificate method in PubnubExample.cs do not get Untrust root error. For testing, you can return "true" for ValidateServerCertificate method to verify whether error is gone or not. However there is security risk in hardcoding "true" in production environment.
+Resolution: This error may occur when the Unity example was run with SSL enabled. Please ensure that ValidateServerCertificate method in PubnubExample.cs do not get Untrust root error. For testing, you can return "true" for ValidateServerCertificate method to verify whether error is gone or not. However there is security risk in hardcoding "true" in production environment. 
+
+This ValidateServerCertificate has been set to return true in case of UNITY_ANDROID
 
 
 * NOTE: "/" (slash) being part of channel name will not work. So it is recommeded to avoid using "/" in channel names.
