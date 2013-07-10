@@ -24,20 +24,21 @@ We've made a [screencast](https://vimeo.com/69591819) that will walk you through
 5. Click Build and Run. (NOTE: To run the demo on "PC, Mac& Linux Standalone" platform, Unity Pro version is required)
 
 #### Running the Demo App on Mac
-Common Steps:
+####Common Steps:
+
 1. Open up the Unity Project from Standalone\PubnubUnity folder present in the PubNub github repo.
 2. Ensure "Pubnub Example" is added as component to Main Camera.
 3. Goto File menu -> Build Settings.
 
-##### Mac
-Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
+##### Mac (Follow the 3 steps listed under Common Steps for Running the Demo App on Mac)
+
 1. In the dialog that opens select PC, Mac, Linux Standalone under the platform and click "Switch Platform".
 2. On the right side of the same dialog select Mac under "Target Platform".
 3. Click "Build and Run"
 4. This will run the PubNub example in the unity standalone player for Mac
 
-##### iOS (requires Xcode to be installed)
-Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
+##### iOS (requires Xcode to be installed, follow the 3 steps listed under Common Steps for Running the Demo App on Mac)
+
 1. In the dialog the opens select iOS under the platform and click "Switch Platform".
 2. Click "Build and Run"
 4. This will run the PubNub example in the iPad simulator
@@ -45,8 +46,8 @@ Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
 5. The code uses the pre-compiler flag UNITY_IOS to distinguish between other platforms.
 6. Target iOS version 4.0 and above. 
 
-##### Android (requires Android development environment to be set)
-Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
+##### Android (requires Android development environment to be set, follow the 3 steps listed under Common Steps for Running the Demo App on Mac)
+
 1. In the dialog the opens select Android under the platform and click "Switch Platform".
 2. Click "Build and Run". This button may be disabled or you may get an error that no devices are found. To resolve this please ensure that the android emulator is running.
 3. This will run the PubNub example in the Android emulator. 
