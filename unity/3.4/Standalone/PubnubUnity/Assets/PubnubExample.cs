@@ -44,13 +44,13 @@ public class PubnubExample : MonoBehaviour {
 
     static Pubnub pubnub;
 
-    private static ConcurrentQueue<string> _recordQueue = new ConcurrentQueue<string>();
+    private static ConcurrentQueue<string> recordQueue = new ConcurrentQueue<string>();
 
     //GameObject PubnubApiResult;
     Vector2 scrollPosition = Vector2.zero;
     string pubnubApiResult = "";
 
-	bool _requestInProcess = false;
+	bool requestInProcess = false;
 
     bool showPublishPopupWindow = false;
 
@@ -209,9 +209,9 @@ public class PubnubExample : MonoBehaviour {
 #if(UNITY_IOS)
 		if(pubnubState == PubnubState.DisconnectRetry)
 		{
-			if(!_requestInProcess)
+			if(!requestInProcess)
 			{
-				_requestInProcess = true;
+				requestInProcess = true;
 				ThreadPool.QueueUserWorkItem(new WaitCallback(DoAction), pubnubState);
 			}
 		}
@@ -265,7 +265,7 @@ public class PubnubExample : MonoBehaviour {
             } else if ((PubnubState)pubnubState == PubnubState.DisconnectRetry) {
                 AddToPubnubResultContainer ("Running Disconnect Retry");
                 pubnub.TerminateCurrentSubscriberRequest();
-				_requestInProcess = false;
+				requestInProcess = false;
             }
         }
         catch (Exception ex)
@@ -371,10 +371,10 @@ public class PubnubExample : MonoBehaviour {
         int newRecordLen = 0;
         sbResult.Append(pubnubApiResult);
 
-        if (_recordQueue.TryPeek(out recordTest))
+        if (recordQueue.TryPeek(out recordTest))
         {
             string currentRecord = "";
-            while (_recordQueue.TryDequeue(out currentRecord))
+            while (recordQueue.TryDequeue(out currentRecord))
             {
                 sbResult.AppendLine(currentRecord);
             }
@@ -443,7 +443,7 @@ public class PubnubExample : MonoBehaviour {
 
     void AddToPubnubResultContainer(string result)
     {
-        _recordQueue.Enqueue(result);
+        recordQueue.Enqueue(result);
     }
 
 }
