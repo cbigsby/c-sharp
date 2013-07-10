@@ -32,10 +32,10 @@ We've made a [screencast](https://vimeo.com/69591819) that will walk you through
 
 ##### Mac (Follow the 3 steps listed under Common Steps for Running the Demo App on Mac)
 
-1. In the dialog that opens select PC, Mac, Linux Standalone under the platform and click "Switch Platform".
-2. On the right side of the same dialog select Mac under "Target Platform".
-3. Click "Build and Run"
-4. This will run the PubNub example in the unity standalone player for Mac
+4. In the dialog that opens select PC, Mac, Linux Standalone under the platform and click "Switch Platform".
+5. On the right side of the same dialog select Mac under "Target Platform".
+6. Click "Build and Run"
+7. This will run the PubNub example in the unity standalone player for Mac
 
 ##### iOS (requires Xcode to be installed, follow the 3 steps listed under Common Steps for Running the Demo App on Mac)
 
