@@ -1,5 +1,5 @@
 ## PubNub 3.4 Web Data Push Cloud-Hosted API
-### Unity 4 for "PC, Mac& Linux Standalone" and "Android" platforms (WebPlayer
+### Unity 4 for "PC, Mac& Linux Standalone", iOS and "Android" platforms 
 
 ### View this First!
 We've made a [screencast](https://vimeo.com/69591819) that will walk you through the general setup. Check it out!
@@ -15,7 +15,7 @@ We've made a [screencast](https://vimeo.com/69591819) that will walk you through
 
 #### Running the Demo App on PC
 
-1. Open up the Unity Project from Standalone\PubnubUnity folderpresent in the PubNub github repo.
+1. Open up the Unity Project from Standalone\PubnubUnity folder present in the PubNub github repo.
 2. Ensure "PubNub Example" is added as component to Main Camera.
 3. Go to Edit menu --> Project Settings --> Player. 
    Under "Optimization" section, ensure Api Compatibility Level is ".Net 2.0".
@@ -31,34 +31,34 @@ Common Steps:
 
 ##### Mac
 Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
-3. In the dialog that opens select PC, Mac, Linux Standalone under the platform and click "Switch Platform".
-4. On the right side of the same dialog select Mac under "Target Platform".
-5. Click "Build and Run"
-6. This will run the PubNub example in the unity standalone player for Mac
+1. In the dialog that opens select PC, Mac, Linux Standalone under the platform and click "Switch Platform".
+2. On the right side of the same dialog select Mac under "Target Platform".
+3. Click "Build and Run"
+4. This will run the PubNub example in the unity standalone player for Mac
 
 ##### iOS (requires Xcode to be installed)
 Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
-3. In the dialog the opens select iOS under the platform and click "Switch Platform".
-4. Click "Build and Run"
-5. This will run the PubNub example in the iPad simulator
-6. You may get an error SystemException: System.Net.Sockets are supported only on Unity Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
-7. The code uses the pre-compiler flag UNITY_IOS to distinguish between other platforms.
-8. Target iOS version 4.0 and above. 
+1. In the dialog the opens select iOS under the platform and click "Switch Platform".
+2. Click "Build and Run"
+4. This will run the PubNub example in the iPad simulator
+4. You may get an error SystemException: System.Net.Sockets are supported only on Unity Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
+5. The code uses the pre-compiler flag UNITY_IOS to distinguish between other platforms.
+6. Target iOS version 4.0 and above. 
 
 ##### Android (requires Android development environment to be set)
 Follow the 3 steps listed under Common Steps for Running the Demo App on Mac
-3. In the dialog the opens select Android under the platform and click "Switch Platform".
-4. Click "Build and Run". This button may be disabled or you may get an error that no devices are found. To resolve this please ensure that the android emulator is running.
-5. This will run the PubNub example in the Android emulator. 
-6. You may get an error SystemException: System.Net.Sockets are supported only on Unity Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
-7. The code uses the pre-compiler flag UNITY_ANDROID to distinguish between other platforms.
-8. If running on the emulator please enable GPU emulation.
-9. Target Android version 4 (Ice cream sandwich) and above.
+1. In the dialog the opens select Android under the platform and click "Switch Platform".
+2. Click "Build and Run". This button may be disabled or you may get an error that no devices are found. To resolve this please ensure that the android emulator is running.
+3. This will run the PubNub example in the Android emulator. 
+4. You may get an error SystemException: System.Net.Sockets are supported only on Unity Pro. Referenced from assembly 'Assembly-CSharp'. If so you need to use the Unity3d pro.
+5. The code uses the pre-compiler flag UNITY_ANDROID to distinguish between other platforms.
+6. If running on the emulator please enable GPU emulation.
+7. Target Android version 4 (Ice cream sandwich) and above.
 
 
 #### Running the Tests
 
-1. Open up the Unity Project from either Standalone\UnityUnitTest or WebPlayer\UnityUnitTest folder.
+1. Open up the Unity Project from Standalone\UnityUnitTest folder.
 2. Click "UUnit" menu to run unit tests. NOTE: If "UUnit" menu item is not showing up, ensure that /Assets/Standard Assets/Editor/UUnit/UUnitTestRunner.cs file exists.
 3. Make Console tab as active tab and then Click UUnit so that unit test results will be visible in console.
 
